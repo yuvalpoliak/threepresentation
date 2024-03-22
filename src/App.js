@@ -1,21 +1,24 @@
 import './App.css';
-import Box from './components/Box';
-import { OrbitControls, Stats } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
+import { Leva } from 'leva';
+import { Experience } from './components/Experience';
+import { Suspense } from 'react';
+import { Overlay } from './components/Overlay';
 
 function App() {
 
 
   return (
     <>
-    <Canvas>
-      <ambientLight />
-      <pointLight position={[10, 10, 10]} />
-      <OrbitControls />
-      <Box position={[-1.2, 0, 0]} />
-      <Box position={[1.2, 0, 0]} />
-      <Stats />
+    <Suspense fallback={<div />}>
+    <Leva hidden />
+    <Overlay />
+    <Canvas shadows camera={{position: [0,0,5], fov: 30}}>
+    <color attach='background' args={["#ececec"]} />
+      <Experience />
     </Canvas>
+    </Suspense>
     </>
   );
 }
