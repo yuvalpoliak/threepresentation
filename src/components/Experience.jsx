@@ -3,13 +3,16 @@ import {
   Environment,
   Grid,
   MeshDistortMaterial,
+  MeshWobbleMaterial,
   RenderTexture,
+  Text3D,
 } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
+import {  useThree } from "@react-three/fiber";
 import { useControls } from "leva";
 import CameraHandler from "./CameraHandler";
 import { scenes } from "./scenes";
 import { Scene } from "./Scene";
+import * as font from 'three/examples/fonts/helvetiker_bold.typeface.json';
 
 export const Experience = () => {
   const viewport = useThree((state) => state.viewport);
@@ -46,6 +49,22 @@ export const Experience = () => {
         >
           <MeshDistortMaterial color={scenes[2].mainColor} speed={3} />
         </Dodecahedron>
+                <mesh
+          position-x={3* (viewport.width + slideDistance)}
+          position-y={viewport.height / 2 + 1.5}
+        >
+          <coneGeometry />
+          <MeshDistortMaterial color={scenes[3].mainColor} speed={3} />
+        </mesh>
+        {/*
+          <mesh
+          position-x={4* (viewport.width + slideDistance)}
+          position-y={viewport.height / 2 + 1.5}
+        >
+          <torusGeometry />
+          <MeshDistortMaterial color={scenes[4].mainColor} speed={3} />
+        </mesh>
+        */}
       </group>
 
       <Grid
@@ -65,6 +84,13 @@ export const Experience = () => {
           key={index}
           position={[index * (viewport.width + slideDistance), 0, 0]}
         >
+        <Text3D
+        font={font}
+        scale={[0.1,0.1,0.1]}
+        position={[-1, 1.1, 0.2]}
+        >PBL(Project Based Learning)
+        <MeshWobbleMaterial factor={0.1}  />
+        </Text3D>
           <planeGeometry args={[viewport.width, viewport.height]} />
           <meshBasicMaterial toneMapped={false}>
             <RenderTexture attach="map">
@@ -76,3 +102,4 @@ export const Experience = () => {
     </>
   );
 };
+

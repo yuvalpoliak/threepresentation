@@ -6,19 +6,33 @@ import {
   PerspectiveCamera,
   RandomizedLight,
   Sphere,
+  useGLTF,
 } from "@react-three/drei";
 
 import * as THREE from "three";
 
-import React from "react";
+import React, {useEffect} from "react";
 import { DEG2RAD } from "three/src/math/MathUtils";
+import { useAtom } from "jotai";
+import { slideAtom } from "./CameraHandler";
 
 export const Scene = ({ mainColor, ...props }) => {
-
-  //const ratioScale = Math.min(1.2, Math.max(0.5, window.innerWidth / 1920));
+  const [slide] = useAtom(slideAtom)
+  const { scene } = useGLTF('assests/animeclassroom/scene.gltf');
+    useEffect(() => {
+    scene.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+  }, [scene]);
   return (
     <>
       <color attach="background" args={["#ffffff"]} />
+ <primitive object={scene} scale={[1,1,1]}  />
+
+
       <group {...props} dispose={null}>
         <PerspectiveCamera makeDefault position={[3, 3, 8]} near={0.5} />
         <OrbitControls
@@ -27,9 +41,10 @@ export const Scene = ({ mainColor, ...props }) => {
           maxPolarAngle={DEG2RAD * 75}
           minDistance={6}
           maxDistance={10}
-          autoRotateSpeed={0.5}
+          autoRotateSpeed={0.25}
         />
         <ambientLight intensity={0.1} color="pink" />
+        
         <AccumulativeShadows
           frames={100}
           alphaTest={0.9}
@@ -57,6 +72,7 @@ export const Scene = ({ mainColor, ...props }) => {
           <Sphere scale={15}>
             <meshBasicMaterial color={mainColor} side={THREE.BackSide} />
           </Sphere>
+
           <Lightformer
             position={[5, 0, -5]}
             form="rect" // circle | ring | rect (optional, default = rect)
@@ -96,3 +112,5 @@ export const Scene = ({ mainColor, ...props }) => {
     </>
   );
 };
+
+useGLTF.preload('/public/modles/scene.gltf');
